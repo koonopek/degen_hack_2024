@@ -66,7 +66,7 @@ func analyzeFileSentiment(filePath string) error {
 
 	// Collect results
 	for res := range que {
-		fmt.Printf("%s, %d\n", res.string, res.uint8)
+		fmt.Printf("%d\n", res.uint8)
 	}
 
 	return nil

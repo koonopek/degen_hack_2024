@@ -9,6 +9,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@types/lodash": "^4.14.202",
+    "lodash": "^4.17.21",
     "npmlog": "^7.0.1",
     "ya-ts-client": "^0.5.3"
   },
