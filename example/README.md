@@ -7,3 +7,8 @@
 
 
 I understand that Golem is better suited for tasks that demand significant CPU and RAM resources rather than those involving extensive data transmission. Unfortunately, due to time constraints, I was unable to develop a more suitable example. The primary purpose of this example is to showcase the library's capabilities
+
+## More then thousand words
+![alt text](image.png)
+[Check out example code](./main.ts)
+

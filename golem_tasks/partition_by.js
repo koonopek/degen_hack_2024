@@ -10,14 +10,14 @@ async function main() {
   const sentences = fileContent.match(/[^.!?]+[.!?]/g) || [];
 
   const promises = [];
-  for(const letter of letters.split(',')) {
+  for (const letter of letters.split(',')) {
     const sentencesWithFindLetter = sentences.filter(sentence => new RegExp(`\\b${letter}\\b`).test(sentence)).map(s => s.trim());
 
-    const path = `/golem/work/sentences_with_letter_${letter}`;    
-    promises.push(fs.writeFile(      
-       path,
-       sentencesWithFindLetter.join('\n')
-    ));    
+    const path = `/golem/work/sentences_with_letter_${letter}`;
+    promises.push(fs.writeFile(
+      path,
+      sentencesWithFindLetter.join('\n')
+    ));
 
     process.stdout.write(path + "\n");
   }

@@ -32,17 +32,8 @@ async function main() {
     minMemGib: 1,
   });
 
+  const wordsToAnalyze = ["I", "you", "We", "god", "devil", "mother", "father"];
   try {
-    const wordsToAnalyze = [
-      "I",
-      "you",
-      "We",
-      "god",
-      "devil",
-      "mother",
-      "father",
-    ];
-
     const partitionByTitle = new Stage("partition_by", executorJs, [
       new ExecutableToFiles(
         "letter_1",
@@ -74,13 +65,7 @@ async function main() {
               new ExecutableToStdout(
                 `sentiment_${outputIndex}_${wordsToAnalyze[wordIndex]}`,
                 new FileInput("golem_tasks/go/main"),
-                [
-                  new FileInput(
-                    partitionByTitle.outputs[outputIndex].then(
-                      (o) => o[wordIndex]
-                    )
-                  ),
-                ]
+                [new FileInput(partitionByTitle.outputs[outputIndex].then((o) => o[wordIndex]))]
               )
           )
       )
@@ -90,33 +75,30 @@ async function main() {
       new ExecutableToStdout(
         "stats",
         new FileInput("golem_tasks/stats.js"),
-        range(Object.values(sentiment.outputs).length).flatMap(
-          (i) => new FileInput(sentiment.outputs[i].then((o) => o[0]))
+        range(Object.values(sentiment.outputs).length).flatMap((i) => 
+          new FileInput(sentiment.outputs[i].then((o) => o[0]))  
         ),
         "node"
       ),
     ]);
-
-    const pipeline = new Pipeline("test-2", new FsCheckpointer("outputs"), [
-      partitionByTitle,
-      sentiment,
-      reduce,
-    ]);
-
+    const pipeline = new Pipeline("test-2", new FsCheckpointer("outputs"), [partitionByTitle, sentiment, reduce]);
     await pipeline.run();
-
-    reduce.outputs[0].then((result) => {
-      console.log("RESULT RAPORT");
-      console.log(
-        JSON.stringify(JSON.parse(readFileSync(result[0]).toString()), null, 4)
-      );
-    });
+    printResult(reduce);
   } catch (err) {
     console.error("An error occurred:", err);
   } finally {
     await executorJs.shutdown();
     await executorMultiThreaded.shutdown();
   }
+}
+
+function printResult(reduce: Stage) {
+  reduce.outputs[0].then((result) => {
+    console.log("RESULT RAPORT");
+    console.log(
+      JSON.stringify(JSON.parse(readFileSync(result[0]).toString()), null, 4)
+    );
+  });
 }
 
 main();

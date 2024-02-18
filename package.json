@@ -15,6 +15,7 @@
     "ya-ts-client": "^0.5.3"
   },
   "devDependencies": {
-    "@types/npmlog": "^7.0.0"
+    "@types/npmlog": "^7.0.0",
+    "ts-node": "^10.9.2"
   }
 }

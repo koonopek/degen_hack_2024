@@ -51,7 +51,6 @@ export class Stage {
       return await op.run(ctx);
     });
 
-    // polimorphism possible
     const urls = await this.checkPointer.saveCheckpoint(op.fullName, result);
     this.deferedOutputs[op.fullName](urls);
   }
