@@ -19,7 +19,7 @@ export class FsCheckpointer implements Checkpointer {
     this.baseDir = path.join(this.baseDir, id);
 
     if (!fs.existsSync(this.baseDir)) {
-      await fs.promises.mkdir(this.baseDir);
+      await fs.promises.mkdir(this.baseDir,{recursive:true});
     }
   }
 

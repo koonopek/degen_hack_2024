@@ -16,9 +16,9 @@ async function main() {
     package: "golem/node:20-alpine",
     yagnaOptions: { apiKey: "try_golem" },
     maxTaskRetries: 2,
-    // minCpuCores: 1,
-    // minCpuThreads: 1,
-    // minMemGib: 1,
+    minCpuCores: 1,
+    minCpuThreads: 1,
+    minMemGib: 1,
   });
 
   const executorMultiThreaded = await TaskExecutor.create({
@@ -27,9 +27,9 @@ async function main() {
       return proposal.properties["golem.inf.cpu.architecture"] === "x86_64";
     },
     yagnaOptions: { apiKey: "try_golem" },
-    maxTaskRetries: 0,
-    // minCpuCores: 1,
-    // minMemGib: 1,
+    maxTaskRetries: 2,
+    minCpuCores: 2,
+    minMemGib: 1,
   });
 
   const wordsToAnalyze = ["I", "you", "We", "god", "devil", "mother", "father"];
