@@ -34,6 +34,8 @@ async function main() {
 
   const wordsToAnalyze = ["I", "you", "We", "god", "devil", "mother", "father"];
   try {
+
+    // buidling partition by title stage
     const partitionByTitle = new Stage("partition_by", executorJs, [
       new ExecutableToFiles(
         "letter_1",
@@ -55,6 +57,7 @@ async function main() {
       ),
     ]);
 
+    // building stage sentiment
     const sentiment = new Stage(
       "sentiment",
       executorMultiThreaded,
@@ -65,24 +68,31 @@ async function main() {
               new ExecutableToStdout(
                 `sentiment_${outputIndex}_${wordsToAnalyze[wordIndex]}`,
                 new FileInput("golem_tasks/go/main"),
-                [new FileInput(partitionByTitle.outputs[outputIndex].then((o) => o[wordIndex]))]
+                [new FileInput(partitionByTitle.outputs[outputIndex].then((o) => o[wordIndex]))] // task will start as soon as outputs[outputIndex] promise resolves
               ) 
           )
       )
     );
 
+    // building stage reduce
     const reduce = new Stage("reduce", executorJs, [
       new ExecutableToStdout(
         "stats",
         new FileInput("golem_tasks/stats.js"),
-        range(Object.values(sentiment.outputs).length).flatMap((i) => 
-          new FileInput(sentiment.outputs[i].then((o) => o[0]))  
+        range(Object.values(sentiment.outputs).length).flatMap(
+          (i) => new FileInput(sentiment.outputs[i].then((o) => o[0])) // task will start as soon as outputs[outputIndex] promise resolves
         ),
         "node"
       ),
     ]);
+
+    // consolidating into pipeline
     const pipeline = new Pipeline("test-2", new FsCheckpointer("outputs"), [partitionByTitle, sentiment, reduce]);
+    
+    // trigger all
     await pipeline.run();
+
+    // print results
     printResult(reduce);
   } catch (err) {
     console.error("An error occurred:", err);
