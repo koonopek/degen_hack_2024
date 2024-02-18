@@ -1,6 +1,8 @@
 # Example
 
-How to run: `ts-node example/main.ts`
+How to run: 
+- `npm i`
+- `ts-node example/main.ts`
 Subsequent runs will be reusing checkpoints you can change. Clear `outputs` folder or change pipeline ID to prevent that.
 
 1. In this example we have two files which contains William Shakespeare texts.
