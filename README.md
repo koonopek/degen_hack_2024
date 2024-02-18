@@ -1,6 +1,6 @@
-# Golem pipeline
+# Golem pipelines
 
-Golem pipelines is library which allows to spawn golem tasks in declarative form, this approach unlocks some sexy features.
+Golem pipelines is a library that allows to spawn golem tasks in declarative form, this approach unlocks some sexy features.
 
 ## Features
 - **declarative** Declarative code should be easier to read/maintain/extend  particularly for projects requiring high levels of parallel computation across distributed systems.

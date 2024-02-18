@@ -29,7 +29,7 @@ export class FileInput implements Input {
     const fileName = path.basename(hostFilePath);
     const dstPath = path.join("/golem/input/", fileName);
     const uploadResult = await retry(
-      () => ctx.uploadFile(path.join(__dirname, hostFilePath), dstPath),
+      () => ctx.uploadFile( hostFilePath, dstPath),
       3
     );
 
