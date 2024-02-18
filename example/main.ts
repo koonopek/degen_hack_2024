@@ -9,7 +9,7 @@ import {
   FsCheckpointer,
   Pipeline,
   Stage,
-} from ".";
+} from "../src";
 
 async function main() {
   const executorJs = await TaskExecutor.create({
@@ -51,7 +51,7 @@ async function main() {
           new ArgInput([wordsToAnalyze.join(",")]),
           new FileInput("inputs/t8.shakespeare-1.txt"),
         ],
-        "node",
+        "node"
       ),
       new ExecutableToFiles(
         "letter_2",
@@ -60,7 +60,7 @@ async function main() {
           new ArgInput([wordsToAnalyze.join(",")]),
           new FileInput("inputs/t8.shakespeare-2.txt"),
         ],
-        "node",
+        "node"
       ),
     ]);
 
@@ -77,13 +77,13 @@ async function main() {
                 [
                   new FileInput(
                     partitionByTitle.outputs[outputIndex].then(
-                      (o) => o[wordIndex],
-                    ),
+                      (o) => o[wordIndex]
+                    )
                   ),
-                ],
-              ),
-          ),
-      ),
+                ]
+              )
+          )
+      )
     );
 
     const reduce = new Stage("reduce", executorJs, [
@@ -91,9 +91,9 @@ async function main() {
         "stats",
         new FileInput("golem_tasks/stats.js"),
         range(Object.values(sentiment.outputs).length).flatMap(
-          (i) => new FileInput(sentiment.outputs[i].then((o) => o[0])),
+          (i) => new FileInput(sentiment.outputs[i].then((o) => o[0]))
         ),
-        "node",
+        "node"
       ),
     ]);
 
@@ -108,7 +108,7 @@ async function main() {
     reduce.outputs[0].then((result) => {
       console.log("RESULT RAPORT");
       console.log(
-        JSON.stringify(JSON.parse(readFileSync(result[0]).toString()), null, 4),
+        JSON.stringify(JSON.parse(readFileSync(result[0]).toString()), null, 4)
       );
     });
   } catch (err) {
@@ -120,31 +120,3 @@ async function main() {
 }
 
 main();
-//
-//        I                you                all
-// analyze sentiment  analyze sentiment      sentiment
-//       sum                sum
-//                          stats
-
-// budowanie reuzywlnych klockow na wyzszmy poziome
-// latwo przeniesc do przegladarki i udostepnic innym i pozwolic budowac z insitejacych klockow
-// deklaratywne podejscie
-// latwiej analizowac kod
-//An error occurred: GolemWorkError: Unable to execute task. Error: Failed to upload outputs/test-2/sentiment::sentiment_01.data: Local service error: State error: Busy: StatePair(Ready, Some(Ready))
-
-// issues streams doesnt work
-// beforeEach doesnt work so redundant downloads
-
-// url: http://127.0.0.1:7465/ya-client/#/
-// what is app-key
-// type Input = "file";
-// type Output = "file" | "byteStream";
-
-// new Pipeline([
-//   new Stage([fileChunk1, fileChunk2, fileChunk3]),
-//   [partitionBy, partitionBy, partitionBy],
-//   [checkPoint],
-//   new Stage([Chunk]),
-//   [hash, hash, hash],
-//   [checkPoint],
-// ]);

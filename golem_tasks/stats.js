@@ -1,5 +1,4 @@
 const { readFileSync } = require('node:fs');
-const path = require('node:path');
 
 function main() {
   const raport = {};
